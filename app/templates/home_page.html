@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block main %}
+
+<div class="container py-4 ">
+  <!-- <h1>Name {{request.user.username}}</h1> -->
+
+  <div class="alert alert-secondary" role="alert">
+    <h1 class="h5">Active</h1>
+  </div>
+  
+
+
+  <div class="d-grid my-2">
+    <div class="row">
+      {% for qrCode in qr_codes %}
+      <div class="col-xl-3 col-sm-6 col-12 my-2">
+        <div class="card text-left">
+          {% if qrCode.qr_code %}
+          <img class="card-img-top" src="{{qrCode.qr_code}}" alt="" />
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{{scanned_codes.len}}
+  {% if scanned_codes|length > 0   %}
+
+  <div class="alert alert-danger" role="alert">
+    <h1 class="h5">Expires</h1>
+  </div>
+  
+
+  <div class="d-grid my-2">
+    <div class="row">
+      {% for qrCode in scanned_codes %}
+      <div class="col-xl-3 col-sm-6 col-12 my-2">
+        <div class="card text-left">
+          {% if qrCode.qr_code %}
+          <img class="card-img-top" src="{{qrCode.qr_code.qr_code}}" alt="" />
+          {% endif %}
+          <div class="card-body">
+            {% if qrCode.user.id == request.user.id %}
+            <p href="#" class="btn btn-sm btn-danger m-0 rounded-pill">Expires</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+  {% endif %}
+
+    </div>
+  </div>
+
+</div>
+
+<!-- <div class="card text-left">
+  <img class="card-img-top" src="holder.js/100px180/" alt="">
+  <div class="card-body">
+    <h4 class="card-title">Title</h4>
+    <p class="card-text">Body</p>
+  </div>
+</div> -->
+{% endblock main %}
