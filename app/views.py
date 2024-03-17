@@ -90,6 +90,21 @@ def scanView(request):
     return render(request, "scan_page.html")
 
 
+@login_required(login_url="/login")
+def codeDetailView(request, uuid):
+    print(uuid)
+    qr_code = QRCodeData.objects.get(uuid=uuid)
+
+    if qr_code is None:
+        return render(
+            request, "code_detail.html", {
+                "error": "Not Found",
+            }
+        )
+    context = {"qr_code": qr_code}
+    return render(request, "code_detail.html", context)
+
+
 def loginView(request):
     if request.user.is_authenticated:
         return redirect("/")

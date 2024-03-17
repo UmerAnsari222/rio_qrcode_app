@@ -7,6 +7,7 @@ from .views import (
     profileView,
     scanView,
     dashboardView,
+    codeDetailView
 )
 
 urlpatterns = [
@@ -14,6 +15,8 @@ urlpatterns = [
     path("profile", view=profileView, name="ProfileView"),
     path("dashboard", view=dashboardView, name="DashboardView"),
     path("scan", view=scanView, name="ScanView"),
+    path("code/<str:uuid>", view=codeDetailView, name="CodeDetailView"),
+
     path("login", view=loginView, name="LoginView"),
     path("register", view=registerView, name="RegisterView"),
     path("logout", view=logoutView, name="LogoutView"),

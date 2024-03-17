@@ -1,0 +1,39 @@
+{% extends "base.html" %} 
+
+{% block main %}
+
+
+<div class="container py-4">
+  <div class="w-50 mx-auto bg-white shadow-lg rounded px-4 py-3">
+    <div class="w-50 h-50 mx-auto">
+      <img class="w-100 h-100" src="/media/{{qr_code.qr_code_image}}" alt="" />
+    </div>
+
+    <div class="w-50 h-50 mx-auto">
+      <img class="w-100 h-100" src="{{qr_code.qr_code}}" alt="" />
+    </div>
+
+    <div class="my-2">
+      <h5 class="font-weight-bold">Points: <span>{{qr_code.data}}</span></h5>
+
+      {% if qr_code.title %}
+      <h6 class="font-weight-normal">Title: <span>{{qr_code.title}}</span></h6>
+      {% endif %} 
+      
+      
+      {% if qr_code.description %}
+
+      <p>Description: <span>{{qr_code.description}}</span></p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- <div class="card text-left">
+  <img class="card-img-top" src="holder.js/100px180/" alt="">
+  <div class="card-body">
+    <h4 class="card-title">Title</h4>
+    <p class="card-text">Body</p>
+  </div>
+</div> -->
+{% endblock main %}

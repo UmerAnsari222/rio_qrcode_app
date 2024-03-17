@@ -9,7 +9,7 @@ import base64
 
 
 class QRCodeDataAdmin(admin.ModelAdmin):
-    list_display = ["data", "qr_code", "uuid"]
+    list_display = ["title", "data",  "uuid", "qr_code_image"]
 
     def save_model(self, request, obj, form, change):
         # Check if a new object is being created

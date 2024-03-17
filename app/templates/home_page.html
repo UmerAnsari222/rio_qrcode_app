@@ -17,6 +17,9 @@
           {% if qrCode.qr_code %}
           <img class="card-img-top" src="{{qrCode.qr_code}}" alt="" />
           {% endif %}
+          <div class="card-body">
+            <a href="code/{{qrCode.uuid}}" class="btn btn-sm btn-dark m-0 rounded-pill">See more</a>
+          </div>
         </div>
       </div>
       {% endfor %}

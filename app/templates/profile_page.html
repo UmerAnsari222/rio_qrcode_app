@@ -23,12 +23,11 @@
 {% block main %}
 
 <div class="container py-4 ">
-    <h1 class="text-capitalize">Welcome {{profile.username}}</h1>
-
-    <div class="card text-left w-100 mx-auto mt-4">
+    
+    <div class="card text-left w-75 mx-auto mt-4 border-0 shadow-lg">
         <img class="card-img-top mx-auto qr_code " src="{{profile.qr_code}}" alt="">
         <div class="card-body">
-            <h4 class="card-title username_heading">Username: {{profile.username}}</h4>
+            <h4 class="card-title username_heading">Username: Welcome ({{profile.username}})</h4>
             <p class="card-text points">Points: {{profile.points}}</p>
         </div>
     </div>
