@@ -28,9 +28,49 @@
         <img class="card-img-top mx-auto qr_code " src="{{profile.qr_code}}" alt="">
         <div class="card-body">
             <h4 class="card-title username_heading">Username: Welcome ({{profile.username}})</h4>
-            <p class="card-text points">Points: {{profile.points}}</p>
+            <div class="d-flex align-items-center justify-content-between">
+                <p class="card-text points">Points: {{profile.points}}</p>
+                {% if gifts_exists %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-success m-0">Get a Gift</button>
+                </form>
+                {% else %}
+                <p class="btn btn-sm btn-secondary">You Don't have enough points to get gift</p>
+                {% endif %}
+            </div>
         </div>
     </div>
+
+
+   {% if user_gifts|length > 0 %}
+   <div class="w-75 mx-auto my-5 shadow-lg px-2 py-2 rounded">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Points</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for gift in user_gifts %}
+                <tr>
+                    <th scope="row">{{gift.gifts.id}}</th>
+                    <td>{{gift.gifts.name}}</td>
+                    <td>{{gift.gifts.gift_points}}</td>
+                    <td>{{gift.created_at}}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+      </table>
+</div>
+{% endif %}
+ 
+
 
 </div>
 {% endblock main %}
