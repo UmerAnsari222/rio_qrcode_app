@@ -25,7 +25,8 @@ def homeView(request):
     print(scanned_codes_ids)
 
     # Retrieve QRCodeScan objects for scanned codes
-    scanned_codes = QRCodeScan.objects.filter(qr_code_id__in=scanned_codes_ids)
+    scanned_codes = QRCodeScan.objects.filter(
+        qr_code_id__in=scanned_codes_ids, user=user)
     print(scanned_codes)
     # Exclude scanned codes from qr_codes
     qr_codes_not_scanned = qr_codes.exclude(id__in=scanned_codes_ids)
@@ -46,6 +47,7 @@ def profileView(request):
     user = User.objects.get(username=request.user.username)
     smallest_gift_point_record = GiftPoint.objects.order_by(
         'gift_points').first()
+    scan_codes = QRCodeScan.objects.filter(user=user)
 
     gifts_exists = check_gift_points(profile, smallest_gift_point_record)
 
@@ -81,7 +83,8 @@ def profileView(request):
     print(gifts_exists)
     context = {"profile": profile,
                "gifts_exists": gifts_exists.exists(),
-               "user_gifts": user_gifts
+               "user_gifts": user_gifts,
+               "scan_codes": scan_codes
                }
     return render(request, "profile_page.html", context)
 
@@ -98,6 +101,39 @@ def dashboardView(request):
     return render(request, "dashboard_page.html", context)
 
 
+def adminScanView(request):
+    print("adminScanView")
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print(data.get("decodedText"))
+
+        if request.user.is_superuser:
+            try:
+                print("Hello, Admin")
+                user = Profile.objects.get(username=data.get("decodedText"))
+                print(user)
+                if user is not None and user.scanned_by_admin is not True:
+
+                    profile_point = ProfilePoint.objects.all().first()
+
+                    user.points = user.points + profile_point.profile_points
+                    user.scanned_by_admin = True
+
+                    user.save()
+
+                    context = {"success": "QR code Scan Successfully"}
+                    return JsonResponse(context)
+                else:
+                    return JsonResponse(
+                        {"error": "Already give the user points"}, status=500
+                    )
+
+            except:
+                return JsonResponse(
+                    {"error": "Something went wrong"}, status=500
+                )
+
+
 @login_required(login_url="/login")
 def scanView(request):
     if request.method == "POST":
@@ -105,30 +141,36 @@ def scanView(request):
         print(data.get("decodedText"))
 
         if request.user.is_authenticated:
-            user = Profile.objects.get(username=request.user.username)
-            if user is not None:
-                qr_code = QRCodeData.objects.get(uuid=data.get("decodedText"))
-                exist_scan = QRCodeScan.objects.filter(
-                    user=request.user, qr_code=qr_code
-                ).exists()
+            try:
+                user = Profile.objects.get(username=request.user.username)
+                if user is not None:
+                    qr_code = QRCodeData.objects.get(
+                        uuid=data.get("decodedText"))
+                    exist_scan = QRCodeScan.objects.filter(
+                        user=request.user, qr_code=qr_code
+                    ).exists()
 
-                if exist_scan:
-                    return JsonResponse(
-                        {"error": "QR code already scanned"}, status=500
+                    if exist_scan:
+                        return JsonResponse(
+                            {"error": "QR code already scanned"}, status=500
+                        )
+
+                    create_scan = QRCodeScan.objects.create(
+                        user=request.user, qr_code=qr_code
                     )
 
-                create_scan = QRCodeScan.objects.create(
-                    user=request.user, qr_code=qr_code
+                    # user = Profile.objects.get(username=request.user.username)
+
+                    user.points = user.points + qr_code.data
+
+                    user.save()
+
+                    context = {"success": "QR code Scan Successfully"}
+                    return JsonResponse(context)
+            except:
+                return JsonResponse(
+                    {"error": "Something went wrong"}, status=500
                 )
-
-                # user = Profile.objects.get(username=request.user.username)
-
-                user.points = user.points + qr_code.data
-
-                user.save()
-
-                context = {"success": "QR code Scan Successfully"}
-                return JsonResponse(context)
     return render(request, "scan_page.html")
 
 
@@ -198,8 +240,7 @@ def registerView(request):
             if auth is not None:
                 login(request, auth)
                 profile_point = ProfilePoint.objects.first()
-                qr_code = generate_profile_qr_code(
-                    profile_point.profile_points)
+                qr_code = generate_profile_qr_code(user.username)
                 profile = Profile.objects.create(
                     username=user.username, points=0, qr_code=qr_code
                 )

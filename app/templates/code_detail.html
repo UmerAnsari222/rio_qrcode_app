@@ -1,18 +1,73 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block style %}
 
 <style>
+ 
 
-.qr_code_image{
-  width: 600px;
-  height: 400px;
+  .image {
+    object-fit: cover;
+  }
 
-}
-.image{
-  object-fit: cover;
-}
+  @media screen and (min-width: 470px) {
+    /* body {
+      background-color: yellow;
+    } */
 
+    .qr_code_image {
+      width: 100%;
+      height: 400px;
+    }
+
+  }
+
+  @media screen and (min-width: 480px) {
+    /* body {
+      background-color: red;
+    } */
+
+    .mycard{
+      width: 100%;
+    }
+
+    .qr_code_image {
+      width: 100%;
+      height: 400px;
+    }
+
+  }
+
+  @media screen and (min-width: 1050px) {
+    /* body {
+      background-color: blue;
+    } */
+
+    .mycard {
+      width: 70%;
+    }
+
+    .qr_code_image {
+      width: 600px;
+      height: 400px;
+
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    /* body {
+      background-color: green;
+    } */
+
+    .mycard {
+      width: 70%;
+    }
+
+    .qr_code_image {
+      width: 600px;
+      height: 400px;
+
+    }
+  }
 </style>
 
 {% endblock style %}
@@ -24,7 +79,7 @@
 
 
 <div class="container py-4">
-  <div class="w-75 mx-auto bg-white shadow-lg rounded px-4 py-3">
+  <div class=" mx-auto bg-white shadow-lg rounded px-4 py-3 mycard">
     <div class="qr_code_image mx-auto">
       <img class="w-100 h-100 image" src="/media/{{qr_code.qr_code_image}}" alt="" />
     </div>
@@ -38,9 +93,9 @@
 
       {% if qr_code.title %}
       <h6 class="font-weight-normal">Title: <span>{{qr_code.title}}</span></h6>
-      {% endif %} 
-      
-      
+      {% endif %}
+
+
       {% if qr_code.description %}
 
       <p>Description: <span>{{qr_code.description}}</span></p>

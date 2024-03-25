@@ -23,8 +23,8 @@
 {% block main %}
 
 <div class="container py-4 ">
-    
-    <div class="card text-left w-75 mx-auto mt-4 border-0 shadow-lg">
+
+    <div class="card text-left w-100 mx-auto mt-4 border-0 shadow-lg">
         <img class="card-img-top mx-auto qr_code " src="{{profile.qr_code}}" alt="">
         <div class="card-body">
             <h4 class="card-title username_heading">Username: Welcome ({{profile.username}})</h4>
@@ -43,33 +43,62 @@
     </div>
 
 
-   {% if user_gifts|length > 0 %}
-   <div class="w-75 mx-auto my-5 shadow-lg px-2 py-2 rounded">
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Points</th>
-            <th scope="col">Date</th>
-          </tr>
-        </thead>
-        <tbody>
+    {% if user_gifts|length > 0 %}
+    <div class="w-100 mx-auto my-5 shadow-lg px-2 py-2 rounded">
+        <h3 class="font-weight-bolder px-2 py-2">Gifts History</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Points</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
 
-            {% for gift in user_gifts %}
+                {% for gift in user_gifts %}
                 <tr>
                     <th scope="row">{{gift.gifts.id}}</th>
                     <td>{{gift.gifts.name}}</td>
                     <td>{{gift.gifts.gift_points}}</td>
                     <td>{{gift.created_at}}</td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
 
-        </tbody>
-      </table>
-</div>
-{% endif %}
- 
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if scan_codes|length > 0 %}
+    <div class="w-100 mx-auto my-5 shadow-lg px-2 py-2 rounded">
+        <h3 class="font-weight-bolder px-2 py-2">Scan Codes History</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Points</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for code in scan_codes %}
+                <tr>
+                    <th scope="row">{{code.qr_code.uuid}}</th>
+                    <td>{{code.qr_code.title}}</td>
+                    <td>{{code.qr_code.data}}</td>
+                    <td>{{code.scanned_at}}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
 
 
 </div>

@@ -1,14 +1,17 @@
-{% extends "base.html" %} {% block main %}
+
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block main %}
 
 <div class="container py-4 ">
   <!-- <h1>Name {{request.user.username}}</h1> -->
-
+  {% if qr_codes|length > 0   %}
   <div class="alert alert-secondary" role="alert">
     <h1 class="h5">Active</h1>
   </div>
   
-
-
   <div class="d-grid my-2">
     <div class="row">
       {% for qrCode in qr_codes %}
@@ -25,8 +28,19 @@
       {% endfor %}
     </div>
   </div>
+  {% endif %}
 
-{{scanned_codes.len}}
+  {% if qr_codes|length == 0 and scanned_codes|length == 0 %}
+  
+<div class="w-50 mx-auto d-flex align-items-center flex-column " >
+  <h1>OOps there is nothing to show</h1>
+  <img class="w-50 h-50 mx-auto text-center" src="{% static 'images/oops.png' %}" alt="">
+</div>
+
+
+  {% endif %}
+
+
   {% if scanned_codes|length > 0   %}
 
   <div class="alert alert-danger" role="alert">

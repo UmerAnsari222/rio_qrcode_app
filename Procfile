@@ -1,0 +1,1 @@
+web: gunicorn 'rio_qrcode_app.wsgi'
